@@ -217,7 +217,44 @@ elif selectModel == "DT":
 		])	
 	st.dataframe(dtDT, use_container_width=True, hide_index=True)
 	st.write("Based on the table above, the decision tree model has an accuracy of "+str(resultDT))
-	
+      
+
+
+# <<<<<<BUTTON CONCLUSION RESULT>>>>>>>>
+if 'clicked' not in st.session_state:
+    st.session_state.clicked = False
+
+def click_button():
+    st.session_state.clicked = True
+
+st.button('Click To Compare Models and Find the Best Model', on_click=click_button)
+
+if st.session_state.clicked:
+    # Compare Results Between Models
+    st.subheader("List Of All Models Accuracy Score")
+
+    ModelTable = pd.DataFrame(
+        [
+            {"Model": "SVM", "Accuracy Score": maxSVM},
+            {"Model": "KNN", "Accuracy Score": maxKNN},
+            {"Model": "Decision Tree", "Accuracy Score": resultDT}
+        ]
+    )
+    st.dataframe(ModelTable, use_container_width=True, hide_index=True)
+
+    st.subheader("The Best Model")
+    st.write("The best model between SVM, KNN, and Decision Tree is:")
+
+    # Compare Results of three models scores
+    arrayModel = [maxSVM, maxKNN, resultDT]
+    AllmodelResult = max(arrayModel)
+
+    if AllmodelResult == maxSVM:
+        st.write("The SVM model specifically the " + str(svmModel) + " kernel is the best model between the three models with the accuracy score of " + str(maxSVM))
+    elif AllmodelResult == maxKNN:
+        st.write("The KNN model specifically the " + str(knnModel) + " model is the best model between three models with the accuracy score of " + str(maxKNN))
+    elif AllmodelResult == resultDT:
+        st.write("The Decision Tree model is the best model between the three models with the accuracy value of " + str(resultDT))
 
 
 

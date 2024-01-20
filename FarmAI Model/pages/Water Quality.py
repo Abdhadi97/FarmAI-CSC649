@@ -167,6 +167,7 @@ st.subheader("Select Model:")
 st.write("Please select a model to obtain result:")
 selectModelWater = st.selectbox("Model Selection", options=["Support Vector Machine","K-Nearest Neighbor","Decision Tree"])
 
+
 #Display SVM kernel results
 if selectModelWater == "Support Vector Machine":
 
@@ -235,31 +236,44 @@ elif selectModelWater == "Decision Tree":
      st.write(dtResult)
     
    
+import streamlit as st
+import pandas as pd
 
-#Compare Results Between Models
-st.subheader("List Of All Models Accuracy Score")
+# Assume you have maxSVM, maxKNN, dtResult, svmModel, knnModel defined before this code
 
-ModelTable = pd.DataFrame(
-    [
-        {"Model": "SVM","Accuracy Score":maxSVM},
-        {"Model": "KNN","Accuracy Score":maxKNN},
-        {"Model": "Decision Tree","Accuracy Score": dtResult}
-    ]  
-)
-st.dataframe(ModelTable,use_container_width=True, hide_index=True)
+# <<<<<<STATEFUL BUTTON CONCLUSION RESULT>>>>>>>>
+if 'button_state' not in st.session_state:
+    st.session_state.button_state = False
 
-st.subheader("The Best Model")
-st.write("The best model between SVM, KNN, and Decision Tree is:")
+clicked = st.button('Click To Compare Models and Find The Best Model')
 
-#Compare Results of three models scores
-arrayModel = [maxSVM,maxKNN,dtResult]
-AllmodelResult = max(arrayModel)
+if clicked:
+    st.session_state.button_state = not st.session_state.button_state
 
-if AllmodelResult == maxSVM:
-     st.write("The SVM model specifically the "+str(svmModel)+" kernel is the best model between the three models with the accuracy score of "+str(maxSVM))
-elif AllmodelResult == maxKNN:
-     st.write("The KNN model specifically the "+str(knnModel)+" model is the best model between three models with the accuracy score of " +str(maxKNN))
-elif AllmodelResult == dtResult:
-     st.write("The Decision Tree model is the best model between the three models with the accuracy value of "+str(dtResult))
+if st.session_state.button_state:
+    # Compare Results Between Models
+    st.subheader("List Of All Models Accuracy Score")
 
+    ModelTable = pd.DataFrame(
+        [
+            {"Model": "SVM", "Accuracy Score": maxSVM},
+            {"Model": "KNN", "Accuracy Score": maxKNN},
+            {"Model": "Decision Tree", "Accuracy Score": dtResult}
+        ]
+    )
+    st.dataframe(ModelTable, use_container_width=True, hide_index=True)
+
+    st.subheader("The Best Model")
+    st.write("The best model between SVM, KNN, and Decision Tree is:")
+
+    # Compare Results of three models scores
+    arrayModel = [maxSVM, maxKNN, dtResult]
+    AllmodelResult = max(arrayModel)
+
+    if AllmodelResult == maxSVM:
+        st.write("The SVM model specifically the " + str(svmModel) + " kernel is the best model between the three models with the accuracy score of " + str(maxSVM))
+    elif AllmodelResult == maxKNN:
+        st.write("The KNN model specifically the " + str(knnModel) + " model is the best model between three models with the accuracy score of " + str(maxKNN))
+    elif AllmodelResult == dtResult:
+        st.write("The Decision Tree model is the best model between the three models with the accuracy value of " + str(dtResult))
 
