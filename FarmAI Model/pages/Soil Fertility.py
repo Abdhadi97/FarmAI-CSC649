@@ -1,3 +1,4 @@
+from sklearn.tree import DecisionTreeClassifier
 import streamlit as st
 import pandas as pd
 
@@ -44,7 +45,7 @@ st.markdown(description)
 page = st.sidebar.radio("MORE DETAILS", ["Data Input and Data Target", "Training and Testing Dataset"])
 
 # Additional sidebar elements
-model = st.sidebar.selectbox("ALGORITHM",["Choose model","SVM","KNN","RF"])
+model = st.sidebar.selectbox("ALGORITHM",["Choose model","SVM","KNN","DT"])
 
 # Display content based on sidebar choice
 if page == "Data Input and Data Target":
@@ -97,18 +98,18 @@ elif model == "KNN":
     accuracy = knn_model.score(X_test, y_test)
     st.write(f"Model Accuracy: {accuracy:.2%}")
 
-elif model == "RF":
-    st.subheader("Random Forest (RF)")
+elif model == "DT":
+    st.subheader("Decision Tree (DT)")
 
     # Provide information about Random Forest
     st.write('''Random Forest is an ensemble learning method that builds multiple decision trees and merges them to improve accuracy.
              It's robust, handles non-linear relationships well, and helps prevent overfitting''')
     
     # Input elements for Random Forest parameters
-    n_estimators = st.slider("Number of Trees", 1, 200, 50)
-    rf_model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
-    rf_model.fit(X_train, y_train)
-    accuracy = rf_model.score(X_test, y_test)
+    
+    dt_model = DecisionTreeClassifier(random_state=42)
+    dt_model.fit(X_train, y_train)
+    accuracy = dt_model.score(X_test, y_test)
     st.write(f"Model Accuracy: {accuracy:.2%}")
 
     

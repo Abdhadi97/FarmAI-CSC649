@@ -175,15 +175,16 @@ if selectModelWater == "Support Vector Machine":
     st.write("For this dataset, the SVM model is used for classifying water potability. The kernels used for this dataset is Linear, Polynomial, Sigmoid and Radial basis Function.")
     st.write("The SVM model classify the objects by calculating the optimal hyperplane.")
 
-    st.write("Linear Kernel")
-    st.write(resultLinear)
-    st.write("Polynomial Kernel")
-    st.write(resultPoly)
-    st.write("RBF Kernel")
-    st.write(resultRBF)
-    st.write("Sigmoid Kernel")
-    st.write(resultSig)
-
+    st.subheader("The Result of SVM Models With Different Kernels")
+    st.write("The accuracy score for all SVM kernel models are listed below:")
+    dtKNN = pd.DataFrame([
+        {"Kernel": "Linear", "Accuracy Score": resultLinear},
+        {"Kernel": "Polynomial", "Accuracy Score": resultPoly},
+        {"Kernel": "RBF", "Accuracy Score": resultRBF},
+        {"Kernel": "Sigmoid", "Accuracy Score": resultSig}
+    ])
+    st.dataframe(dtKNN, use_container_width=True, hide_index=True)
+   
     # Display the best svm kernel
     st.subheader("Choosen SVM Kernel")
     st.write("The best SVM kernel with the highest accuracy score: ")
@@ -200,17 +201,19 @@ elif  selectModelWater == "K-Nearest Neighbor":
     st.subheader("KNN Description")
     st.write("For this dataset, the KNN model with a few different number of neighbors are implemented. The number of neighbors implemented are 5,25,50,100.")
 
-    st.subheader("Accuracy Score")
+    st.subheader("The Result of KNN Models With Different Neighbors Value")
     st.write("The accuracy score for all KNN models are listed below:")
-    st.write("5 Number of Neighbors")
-    st.write(resultKNN5)
-    st.write("25 Number of Neighbors")
-    st.write(resultKNN25)
-    st.write("50 Number of Neighbors")
-    st.write(resultKNN50)
-    st.write("100 Number of Neighbors")
-    st.write(resultKNN100)
+    dt = pd.DataFrame([
+        {"Number of Neighbor": "5", "Accuracy Score":resultKNN5},
+        {"Number of Neighbor": "25", "Accuracy Score": resultKNN25},
+        {"Number of Neighbor": "50", "Accuracy Score": resultKNN50},
+        {"Number of Neighbor": "100", "Accuracy Score": resultKNN100}
+                    ])
+	
+    st.dataframe(dt,use_container_width=True, hide_index=True)
 
+ 
+ 
     # Display best KNN model 
     st.subheader("Choosen KNN Model")
     st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
