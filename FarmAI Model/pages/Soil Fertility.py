@@ -149,6 +149,8 @@ elif page == "Training and Testing Dataset":
 
 # select model elements
 SelectModelSoil = st.selectbox("ALGORITHM",["Choose model","SVM","KNN","DT"])
+selectInput = st.selectbox("Input Type", options = ["Manual Input","Use Testing Data"])
+
 
 # Display content based on model choice
 if SelectModelSoil == "SVM":
@@ -158,22 +160,43 @@ if SelectModelSoil == "SVM":
     st.write('''Support Vector Machines (SVM) is a powerful algorithm for classification tasks.
              It works well for both linear and non-linear datasets by finding the optimal hyperplane.''')
 
-    # Input elements for SVM kernel
-    st.subheader("The Result of SVM Models With Different Kernels")
-    st.write("The accuracy score for all SVM kernel models are listed below:")
-    dtKNN = pd.DataFrame([
-        {"Kernel": "Linear", "Accuracy Score": resultLinear},
-        {"Kernel": "Polynomial", "Accuracy Score": resultPoly},
-        {"Kernel": "RBF", "Accuracy Score": resultRBF},
-        {"Kernel": "Sigmoid", "Accuracy Score": resultSig}
-    ])
-    st.dataframe(dtKNN, use_container_width=True, hide_index=True)
-   
-    # Display the best svm kernel
-    st.subheader("Choosen SVM Kernel")
-    st.write("The best SVM kernel with the highest accuracy score: ")
-    st.write(svmModel)
-    st.write("With the accuracy score of " + str(maxSVM))
+    if selectInput == "Use Testing Data":
+        # Input elements for SVM kernel
+        st.subheader("The Result of SVM Models With Different Kernels")
+        st.write("The accuracy score for all SVM kernel models are listed below:")
+        dtKNN = pd.DataFrame([
+            {"Kernel": "Linear", "Accuracy Score": resultLinear},
+            {"Kernel": "Polynomial", "Accuracy Score": resultPoly},
+            {"Kernel": "RBF", "Accuracy Score": resultRBF},
+            {"Kernel": "Sigmoid", "Accuracy Score": resultSig}
+        ])
+        st.dataframe(dtKNN, use_container_width=True, hide_index=True)
+    
+        # Display the best svm kernel
+        st.subheader("Choosen SVM Kernel")
+        st.write("The best SVM kernel with the highest accuracy score: ")
+        st.write(svmModel)
+        st.write("With the accuracy score of " + str(maxSVM))
+
+    elif selectInput == "Manual Input":
+         userInput = st.text_area("Please replace with the input data for prediction ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
+         user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+         user_data_2D = [user_data]
+         #make predictions
+         inputLinear = svLinear.predict([user_data_2D][0])
+         inputPoly= svPolynomial.predict([user_data_2D][0])
+         inputRBF =svRBF.predict([user_data_2D][0])
+         inputSig = svSigmoid.predict([user_data_2D][0])
+         
+         st.subheader("The Result From User Input For SVM Model")
+         #show the prediction result
+         dtKNN = pd.DataFrame([
+            {"Kernel": "Linear", "Prediction": inputLinear},
+            {"Kernel": "Polynomial", "Prediction": inputPoly},
+            {"Kernel": "RBF", "Prediction": inputRBF},
+            {"Kernel": "Sigmoid", "Prediction": inputSig}
+         ])
+         st.dataframe(dtKNN, use_container_width=True, hide_index=True)         
     
  
 
@@ -184,24 +207,46 @@ elif SelectModelSoil == "KNN":
     st.write('''K-Nearest Neighbors (KNN) is a simple and effective algorithm for classification tasks.
              It classifies a data point based on the majority class of its k-nearest neighbors.''')
     
-    st.subheader("The Result of KNN Models With Different Neighbors Value")
-    st.write("The accuracy score for all KNN models are listed below:")
-    dt = pd.DataFrame([
-        {"Number of Neighbor": "10", "Accuracy Score":resultKNN10},
-        {"Number of Neighbor": "20", "Accuracy Score": resultKNN20},
-        {"Number of Neighbor": "30", "Accuracy Score": resultKNN30},
-        {"Number of Neighbor": "40", "Accuracy Score": resultKNN40}
-                    ])
-	
-    st.dataframe(dt,use_container_width=True, hide_index=True)
+    if selectInput == "Use Testing Data":
+        st.subheader("The Result of KNN Models With Different Neighbors Value")
+        st.write("The accuracy score for all KNN models are listed below:")
+        dt = pd.DataFrame([
+            {"Number of Neighbor": "10", "Accuracy Score":resultKNN10},
+            {"Number of Neighbor": "20", "Accuracy Score": resultKNN20},
+            {"Number of Neighbor": "30", "Accuracy Score": resultKNN30},
+            {"Number of Neighbor": "40", "Accuracy Score": resultKNN40}
+                        ])
+        
+        st.dataframe(dt,use_container_width=True, hide_index=True)
 
- 
- 
-    # Display best KNN model 
-    st.subheader("Choosen KNN Model")
-    st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
+    
+    
+        # Display best KNN model 
+        st.subheader("Choosen KNN Model")
+        st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
 
-    st.write("With the accuracy score of " + str(maxKNN))
+        st.write("With the accuracy score of " + str(maxKNN))
+
+    elif selectInput == "Manual Input":
+        userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
+        user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+        user_data_2D = [user_data]
+        #make predictions
+        input10 = knn10.predict([user_data_2D][0])
+        input20= knn20.predict([user_data_2D][0])
+        input30 =knn30.predict([user_data_2D][0])
+        input40 = knn40.predict([user_data_2D][0])         
+        st.subheader("The Result From User Input For KNN Model")
+        #show the prediction result
+        dt = pd.DataFrame([
+			{"Number of Neighbor": "10", "Prediction":input10},
+			{"Number of Neighbor": "20", "Prediction": input20},
+			{"Number of Neighbor": "30", "Prediction": input30},
+			{"Number of Neighbor": "40", "Prediction": input40}
+						])
+		
+        st.dataframe(dt, use_container_width=True, hide_index=True)
+
 
 
 elif SelectModelSoil == "DT":
@@ -211,8 +256,27 @@ elif SelectModelSoil == "DT":
     st.write('''Random Forest is an ensemble learning method that builds multiple decision trees and merges them to improve accuracy.
              It's robust, handles non-linear relationships well, and helps prevent overfitting''')
      
-    st.write("The accuracy score of decision tree:")
-    st.write(dtResult)
+    if selectInput == "Use Testing Data":
+        
+        st.write("The accuracy score of decision tree:")
+        st.write(dtResult)
+    elif selectInput == "Manual Input":
+        userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
+
+        user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+
+        user_data_2D = [user_data]
+
+        #make predictions
+        dtPred = dt.predict([user_data_2D][0])
+
+        
+        st.subheader("The Result From User Input For Decision Tree Model")
+        #show the prediction result
+        dtKNN = pd.DataFrame([
+        {"Model": "Decision Tree", "Prediction": dtPred},
+        ])
+        st.dataframe(dtKNN, use_container_width=True, hide_index=True)        
     
 # <<<<<<BUTTON CONCLUSION RESULT>>>>>>>>
 if 'clicked' not in st.session_state:

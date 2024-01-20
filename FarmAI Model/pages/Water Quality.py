@@ -166,6 +166,7 @@ st.write("")
 st.subheader("Select Model:")
 st.write("Please select a model to obtain result:")
 selectModelWater = st.selectbox("Model Selection", options=["Support Vector Machine","K-Nearest Neighbor","Decision Tree"])
+selectInput = st.selectbox("Input Type", options = ["Manual Input","Use Testing Data"])
 
 
 #Display SVM kernel results
@@ -176,50 +177,96 @@ if selectModelWater == "Support Vector Machine":
     st.write("For this dataset, the SVM model is used for classifying water potability. The kernels used for this dataset is Linear, Polynomial, Sigmoid and Radial basis Function.")
     st.write("The SVM model classify the objects by calculating the optimal hyperplane.")
 
-    st.subheader("The Result of SVM Models With Different Kernels")
-    st.write("The accuracy score for all SVM kernel models are listed below:")
-    dtKNN = pd.DataFrame([
-        {"Kernel": "Linear", "Accuracy Score": resultLinear},
-        {"Kernel": "Polynomial", "Accuracy Score": resultPoly},
-        {"Kernel": "RBF", "Accuracy Score": resultRBF},
-        {"Kernel": "Sigmoid", "Accuracy Score": resultSig}
-    ])
-    st.dataframe(dtKNN, use_container_width=True, hide_index=True)
-   
-    # Display the best svm kernel
-    st.subheader("Choosen SVM Kernel")
-    st.write("The best SVM kernel with the highest accuracy score: ")
-    st.write(svmModel)
-    st.write("With the accuracy score of " + str(maxSVM))
+    if selectInput == "Use Testing Data":
+        st.subheader("The Result of SVM Models With Different Kernels")
+        st.write("The accuracy score for all SVM kernel models are listed below:")
+        dtKNN = pd.DataFrame([
+            {"Kernel": "Linear", "Accuracy Score": resultLinear},
+            {"Kernel": "Polynomial", "Accuracy Score": resultPoly},
+            {"Kernel": "RBF", "Accuracy Score": resultRBF},
+            {"Kernel": "Sigmoid", "Accuracy Score": resultSig}
+        ])
+        st.dataframe(dtKNN, use_container_width=True, hide_index=True)
+    
+        # Display the best svm kernel
+        st.subheader("Choosen SVM Kernel")
+        st.write("The best SVM kernel with the highest accuracy score: ")
+        st.write(svmModel)
+        st.write("With the accuracy score of " + str(maxSVM))
+    
+    elif selectInput == "Manual Input":
+         userInput = st.text_area("Please replace with the input data for prediction ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
+
+         user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+
+         user_data_2D = [user_data]
+
+         #make predictions
+         inputLinear = svLinear.predict([user_data_2D][0])
+         inputPoly= svPolynomial.predict([user_data_2D][0])
+         inputRBF =svRBF.predict([user_data_2D][0])
+         inputSig = svSigmoid.predict([user_data_2D][0])
+         
+         st.subheader("The Result From User Input For SVM Model")
+         #show the prediction result
+         dtKNN = pd.DataFrame([
+            {"Kernel": "Linear", "Prediction": inputLinear},
+            {"Kernel": "Polynomial", "Prediction": inputPoly},
+            {"Kernel": "RBF", "Prediction": inputRBF},
+            {"Kernel": "Sigmoid", "Prediction": inputSig}
+         ])
+         st.dataframe(dtKNN, use_container_width=True, hide_index=True)         
 
 #Display KNN kernels results
 elif  selectModelWater == "K-Nearest Neighbor":
-
-   
-
 
     st.header("K-Nearest Neighbor")
     st.subheader("KNN Description")
     st.write("For this dataset, the KNN model with a few different number of neighbors are implemented. The number of neighbors implemented are 5,25,50,100.")
 
-    st.subheader("The Result of KNN Models With Different Neighbors Value")
-    st.write("The accuracy score for all KNN models are listed below:")
-    dt = pd.DataFrame([
-        {"Number of Neighbor": "5", "Accuracy Score":resultKNN5},
-        {"Number of Neighbor": "25", "Accuracy Score": resultKNN25},
-        {"Number of Neighbor": "50", "Accuracy Score": resultKNN50},
-        {"Number of Neighbor": "100", "Accuracy Score": resultKNN100}
-                    ])
-	
-    st.dataframe(dt,use_container_width=True, hide_index=True)
+    if selectInput == "Use Testing Data":
+        st.subheader("The Result of KNN Models With Different Neighbors Value")
+        st.write("The accuracy score for all KNN models are listed below:")
+        dt = pd.DataFrame([
+            {"Number of Neighbor": "5", "Accuracy Score":resultKNN5},
+            {"Number of Neighbor": "25", "Accuracy Score": resultKNN25},
+            {"Number of Neighbor": "50", "Accuracy Score": resultKNN50},
+            {"Number of Neighbor": "100", "Accuracy Score": resultKNN100}
+                        ])
+        
+        st.dataframe(dt,use_container_width=True, hide_index=True)
 
- 
- 
-    # Display best KNN model 
-    st.subheader("Choosen KNN Model")
-    st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
+    
+    
+        # Display best KNN model 
+        st.subheader("Choosen KNN Model")
+        st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
 
-    st.write("With the accuracy score of " + str(maxKNN))
+        st.write("With the accuracy score of " + str(maxKNN))
+    elif selectInput == "Manual Input":
+        userInput = st.text_area("Please replace with the input data for prediction: ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
+        
+        user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+
+        user_data_2D = [user_data]
+
+        #make predictions
+        input5 = knn5.predict([user_data_2D][0])
+        input25= knn25.predict([user_data_2D][0])
+        input50 =knn50.predict([user_data_2D][0])
+        input100 = knn100.predict([user_data_2D][0])
+        
+        st.subheader("The Result From User Input For KNN Model")
+        #show the prediction result
+        dt = pd.DataFrame([
+			{"Number of Neighbor": "5", "Prediction":input5},
+			{"Number of Neighbor": "25", "Prediction": input25},
+			{"Number of Neighbor": "50", "Prediction": input50},
+			{"Number of Neighbor": "100", "Prediction": input100}
+						])
+		
+        st.dataframe(dt, use_container_width=True, hide_index=True)
+        
 
 
 
@@ -227,19 +274,35 @@ elif  selectModelWater == "K-Nearest Neighbor":
 #Display DT result
 elif selectModelWater == "Decision Tree":
      
-     st.header("Decision Tree")
-     st.subheader("Decision Tree Description")
-     st.write("For this dataset, the decision tree ")
-     
-     
-     st.write("The accuracy score of decision tree:")
-     st.write(dtResult)
+    if selectInput == "Use Testing Data":
+        st.header("Decision Tree")
+        st.subheader("Decision Tree Description")
+        st.write("For this dataset, the decision tree ")
+        
+        
+        st.write("The accuracy score of decision tree:")
+        st.write(dtResult)
+        
+    elif selectInput == "Manual Input":
+        userInput = st.text_area("Please replace with the input data for prediction: ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
+
+        user_data = [float(val.strip()) for val in userInput.split(',') if val.strip()]
+
+        user_data_2D = [user_data]
+
+        #make predictions
+        dtPred = dt.predict([user_data_2D][0])
+
+        
+        st.subheader("The Result From User Input For Decision Tree Model")
+        #show the prediction result
+        dtKNN = pd.DataFrame([
+        {"Model": "Decision Tree", "Prediction": dtPred},
+        ])
+        st.dataframe(dtKNN, use_container_width=True, hide_index=True)
     
    
-import streamlit as st
-import pandas as pd
 
-# Assume you have maxSVM, maxKNN, dtResult, svmModel, knnModel defined before this code
 
 # <<<<<<STATEFUL BUTTON CONCLUSION RESULT>>>>>>>>
 if 'button_state' not in st.session_state:
