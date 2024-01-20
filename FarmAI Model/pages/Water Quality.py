@@ -246,7 +246,7 @@ ModelTable = pd.DataFrame(
         {"Model": "Decision Tree","Accuracy Score": dtResult}
     ]  
 )
-st.dataframe(ModelTable,use_container_width=True)
+st.dataframe(ModelTable,use_container_width=True, hide_index=True)
 
 st.subheader("The Best Model")
 st.write("The best model between SVM, KNN, and Decision Tree is:")
