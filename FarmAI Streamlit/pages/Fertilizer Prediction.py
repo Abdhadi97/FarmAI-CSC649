@@ -177,7 +177,8 @@ selectInput = st.selectbox("Select Input Type", options = ["Manual Input","Use T
 
 if selectModel == "KNN":
 		st.subheader("What is KNN?")
-		st.write("KNN is an algorithm is a simple and versatile machine learning approach used for classification and regression tasks. It identifies the k-nearest neighbors of a new data point and assigns a label based on majority voting (for classification) or averages their values. It uses hyperparameter 'k' is as it influencing the algorithm's sensitivity to local patterns. Kernels can be in any but it famous with 1, 5, 10 and 15 kernels.")
+		st.write("KNN is an algorithm is a simple and versatile machine learning approach used for classification and regression tasks. It identifies the k-nearest neighbors of a new data point and assigns a label based on majority voting (for classification) or averages their values. It uses hyperparameter 'k' is as it influencing the algorithm's sensitivity to local patterns. Kernels can be in any but it famous with 1, 5, 10 and 15 kernels. For this dataset, the number of neighbor used is 10,20,30,40")
+
 		if selectInput == "Use Testing Data":
 
 			st.subheader("Results from KNN models: ")
@@ -190,7 +191,7 @@ if selectModel == "KNN":
 		
 			st.dataframe(dt,use_container_width=True, hide_index=True)
 			st.subheader("Choosen KNN model")
-			st.write("Based on the table above, the best KNN model for this dataset is" + str(knnModel))
+			st.write("Based on the table above, the best KNN model for this dataset is " + str(knnModel))
 			st.write("with the accuracy score of " +str(maxKNN))
             
 		elif selectInput == "Manual Input":
@@ -233,9 +234,12 @@ elif selectModel == "SVM":
     
         # Display the best svm kernel
         st.subheader("Choosen SVM Kernel")
-        st.write("The best SVM kernel with the highest accuracy score: ")
-        st.write(svmModel)
-        st.write("With the accuracy score of " + str(maxSVM))
+        dtRs = pd.DataFrame([{
+              "Kernel": svmModel, "Accuracy Score": maxSVM
+		}])
+        st.dataframe(dtRs, use_container_width=True, hide_index=True)
+        st.write("The best SVM kernel with the highest accuracy score is " + str(maxSVM) + " which is "+svmModel )
+
     else:
          userInput = st.text_area("Please replace with the input data for prediction ","Temperature,Humidity,Moisture,Nitrogen,Potassium,Phosphorous")
 

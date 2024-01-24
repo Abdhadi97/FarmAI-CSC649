@@ -145,8 +145,8 @@ if selectModelCrop == "Support Vector Machine":
 
     st.header("Support Vector Machine")
     st.subheader("SVM Description")
-    st.write("For this dataset, the SVM model is used for classifying water potability. The kernels used for this dataset is Linear, Polynomial, Sigmoid and Radial basis Function.")
-    st.write("The SVM model classify the objects by calculating the optimal hyperplane.")
+    st.write("For this dataset, the SVM model is used for recommending the suitable crop based on the various parameters of the soil's condition . The kernels used for this dataset is Linear, Polynomial, Sigmoid and Radial basis Function.")
+    st.write("The SVM model classify the objects by calculating the optimal hyperplane in the feature space.")
     
     if selectInput == "Use Testing Data":
         st.subheader("The Result of SVM Models With Different Kernels")
@@ -161,9 +161,12 @@ if selectModelCrop == "Support Vector Machine":
     
         # Display the best svm kernel
         st.subheader("Choosen SVM Kernel")
-        st.write("The best SVM kernel with the highest accuracy score: ")
-        st.write(svmModel)
-        st.write("With the accuracy score of " + str(maxSVM))
+        dtRs = pd.DataFrame([
+             {"Kernel": svmModel, "Accuracy Score": maxSVM}
+        ])
+        st.dataframe(dtRs, use_container_width=True, hide_index=True)
+        st.write("The best model is "+svmModel+" with the accuracy score of "+str(maxSVM))
+
     else:
          userInput = st.text_area("Please replace with the input data for prediction ","N,P,K,temperature,humidity,ph,rainfall")
 
@@ -197,7 +200,7 @@ elif  selectModelCrop == "K-Nearest Neighbor":
 
     st.header("K-Nearest Neighbor")
     st.subheader("KNN Description")
-    st.write("For this dataset, the KNN model with a few different number of neighbors are implemented. The number of neighbors implemented are 5,25,50,100.")
+    st.write("For this dataset, the KNN model with a few different number of neighbors are implemented. The number of neighbors implemented are 10,20,30,40.")
     if selectInput == "Use Testing Data":
         st.subheader("The Result of KNN Models With Different Neighbors Value")
         st.write("The accuracy score for all KNN models are listed below:")
@@ -212,9 +215,12 @@ elif  selectModelCrop == "K-Nearest Neighbor":
 
             # Display best KNN model 
         st.subheader("Choosen KNN Model")
-        st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
-
-        st.write("With the accuracy score of " + str(maxKNN))
+        dtRs = pd.DataFrame([
+            {"Number of Neighbor": knnModel, "Accuracy Score":maxKNN}
+        ])
+        st.dataframe(dtRs, use_container_width=True, hide_index=True)
+        st.write("The best model is "+knnModel+" with the accuracy score of "+str(maxKNN))
+  
 
     else:
         userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,temperature,humidity,ph,rainfall")
@@ -250,11 +256,12 @@ elif selectModelCrop == "Decision Tree":
     if selectInput == "Use Testing Data":
         st.header("Decision Tree")
         st.subheader("Decision Tree Description")
-        st.write("For this dataset, the decision tree ")
+        st.write( '''A decision tree algorithm is a supervised machine learning algorithm used for both classification and regression tasks. The algorithm creates a tree-like model of decisions based on features present in the training data. It is a predictive modeling tool that recursively splits the dataset into subsets based on the most significant attribute at each node of the tree''' )
+
         
         
-        st.write("The accuracy score of decision tree:")
-        st.write(dtResult)
+        st.write("The accuracy score of decision tree:" + str(dtResult))
+        
         
     elif selectInput == "Manual Input":
         userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,temperature,humidity,ph,rainfall")

@@ -174,9 +174,11 @@ if SelectModelSoil == "SVM":
     
         # Display the best svm kernel
         st.subheader("Choosen SVM Kernel")
-        st.write("The best SVM kernel with the highest accuracy score: ")
-        st.write(svmModel)
-        st.write("With the accuracy score of " + str(maxSVM))
+        dtRs = pd.DataFrame([{
+            "Kernel": svmModel, "Accuracy Score": maxSVM
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)
+        st.write("The best model is "+svmModel+" with the accuracy score of "+str(maxSVM))
 
     elif selectInput == "Manual Input":
          userInput = st.text_area("Please replace with the input data for prediction ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
@@ -223,9 +225,13 @@ elif SelectModelSoil == "KNN":
     
         # Display best KNN model 
         st.subheader("Choosen KNN Model")
-        st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
+        dtRs = pd.DataFrame([{
+            "Number of Neighbor": knnModel, "Accuracy Score": maxKNN
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)
+        st.write("The best model is "+knnModel+" with the accuracy score of "+str(maxKNN))
+       
 
-        st.write("With the accuracy score of " + str(maxKNN))
 
     elif selectInput == "Manual Input":
         userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
@@ -253,13 +259,17 @@ elif SelectModelSoil == "DT":
     st.subheader("Decision Tree (DT)")
 
     # Provide information about Random Forest
-    st.write('''Random Forest is an ensemble learning method that builds multiple decision trees and merges them to improve accuracy.
-             It's robust, handles non-linear relationships well, and helps prevent overfitting''')
+    st.write('''A decision tree algorithm is a supervised machine learning algorithm used for both classification and regression tasks. The algorithm creates a tree-like model of decisions based on features present in the training data. It is a predictive modeling tool that recursively splits the dataset into subsets based on the most significant attribute at each node of the tree.''')
      
     if selectInput == "Use Testing Data":
-        
-        st.write("The accuracy score of decision tree:")
-        st.write(dtResult)
+        dtRs = pd.DataFrame([{
+            "Model": "Decision Tree", "Accuracy Score": dtResult
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)        
+
+
+
+
     elif selectInput == "Manual Input":
         userInput = st.text_area("Please replace with the input data for prediction: ","N,P,K,ph,ec,oc,S,zn,fe,cu,Mn,B")
 

@@ -190,9 +190,13 @@ if selectModelWater == "Support Vector Machine":
     
         # Display the best svm kernel
         st.subheader("Choosen SVM Kernel")
-        st.write("The best SVM kernel with the highest accuracy score: ")
-        st.write(svmModel)
-        st.write("With the accuracy score of " + str(maxSVM))
+        dtRs = pd.DataFrame([{
+            "Kernel": svmModel, "Accuracy Score": maxSVM
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)
+        st.write("The best model is "+svmModel+" with the accuracy score of "+str(maxSVM))
+
+
     
     elif selectInput == "Manual Input":
          userInput = st.text_area("Please replace with the input data for prediction ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
@@ -240,9 +244,12 @@ elif  selectModelWater == "K-Nearest Neighbor":
     
         # Display best KNN model 
         st.subheader("Choosen KNN Model")
-        st.write("The best KNN model with the highest accuracy score: "+str(knnModel))
+        dtRs = pd.DataFrame([{
+            "Number of Neighbor": knnModel, "Accuracy Score": maxKNN
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)
+        st.write("The best model is "+knnModel+" with the accuracy score of "+str(maxKNN))
 
-        st.write("With the accuracy score of " + str(maxKNN))
     elif selectInput == "Manual Input":
         userInput = st.text_area("Please replace with the input data for prediction: ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
         
@@ -277,11 +284,12 @@ elif selectModelWater == "Decision Tree":
     if selectInput == "Use Testing Data":
         st.header("Decision Tree")
         st.subheader("Decision Tree Description")
-        st.write("For this dataset, the decision tree ")
-        
-        
-        st.write("The accuracy score of decision tree:")
-        st.write(dtResult)
+        st.write( '''A decision tree algorithm is a supervised machine learning algorithm used for both classification and regression tasks. The algorithm creates a tree-like model of decisions based on features present in the training data. It is a predictive modeling tool that recursively splits the dataset into subsets based on the most significant attribute at each node of the tree''' )
+        dtRs = pd.DataFrame([{
+            "Model": "Decision Tree", "Accuracy Score": dtResult
+        }])
+        st.dataframe(dtRs,hide_index=True, use_container_width=True)        
+
         
     elif selectInput == "Manual Input":
         userInput = st.text_area("Please replace with the input data for prediction: ","ph,Hardness,Solids,Chloramines,Sulfate,Conductivitiy,Organic Carbon,Trihalomethanes,Turbidity,Potability")
